@@ -165,6 +165,40 @@
       cursor: pointer;
     }
 
+    .menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hamburger-icon {
+      width: 24px;
+      height: 16px;
+      display: none;
+      position: relative;
+    }
+
+    .hamburger-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      transform-origin: center;
+    }
+
+    .hamburger-icon span:nth-child(1) {
+      top: 0;
+    }
+
+    .hamburger-icon span:nth-child(2) {
+      top: 7px;
+    }
+
+    .hamburger-icon span:nth-child(3) {
+      top: 14px;
+    }
+
     .header-action:focus-visible,
     .brand:focus-visible,
     .nav a:focus-visible {
@@ -223,6 +257,15 @@
     .menu-panel {
       display: grid;
       gap: 8px;
+    }
+
+    .menu-option {
+      display: flex;
+      align-items: center;
+    }
+
+    .mobile-menu-tools {
+      display: none;
     }
 
     .language-option,
@@ -384,20 +427,30 @@
 
     .magazine-tile {
       position: relative;
-      flex: 1 1 0;
+      flex: 0 0 var(--tile-size, 25%);
+      width: var(--tile-size, 25%);
       min-width: 0;
       overflow: hidden;
       border-left: 1px solid rgba(255, 255, 255, .16);
       transform-origin: center;
       cursor: pointer;
+      transition: flex-basis .62s cubic-bezier(.2, .8, .2, 1), width .62s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .hero-grid.has-active .magazine-tile {
+      flex-grow: 0 !important;
+      width: var(--tile-size, 20%) !important;
     }
 
     .magazine-tile.is-active {
       z-index: 4;
+      flex-grow: 0 !important;
+      width: var(--tile-size, 40%) !important;
     }
 
     .magazine-tile.is-active img {
       filter: contrast(1.08);
+      transform: scale(1.14) !important;
     }
 
     .magazine-tile:focus {
@@ -415,7 +468,8 @@
 
     .magazine-tile img {
       will-change: transform, filter;
-      transition: filter .9s;
+      transform-origin: center center;
+      transition: transform .44s cubic-bezier(.2, .8, .2, 1), filter .9s;
     }
 
     .magazine-tile:hover img {
@@ -790,6 +844,120 @@
         display: none;
       }
 
+      .utility-action {
+        display: none;
+      }
+
+      .menu-toggle {
+        width: 46px;
+        height: 46px;
+        justify-content: center;
+        border: 1px solid currentColor;
+        border-radius: 999px;
+      }
+
+      .menu-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      .hamburger-icon {
+        display: block;
+      }
+
+      .menu-panel {
+        position: fixed;
+        top: 78px;
+        right: 16px;
+        bottom: auto;
+        left: 16px;
+        z-index: 35;
+        width: auto;
+        max-height: calc(100svh - 96px);
+        padding: 92px clamp(24px, 7vw, 56px) 24px;
+        align-content: start;
+        gap: 0;
+        overflow-y: auto;
+        border: 1px solid rgba(17, 17, 17, .12);
+        background: rgba(244, 242, 237, .94);
+        box-shadow: 0 28px 90px rgba(0, 0, 0, .22);
+        backdrop-filter: blur(18px);
+      }
+
+      .menu-panel::before {
+        content: "VOGUE";
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        width: 58px;
+        height: 58px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #111;
+        border-radius: 50%;
+        color: #111;
+        font-family: var(--serif);
+        font-size: .68rem;
+        font-weight: 700;
+        line-height: 1;
+        transform: translateX(-50%);
+      }
+
+      .menu-option {
+        min-height: 68px;
+        font-family: var(--serif);
+        font-size: clamp(2rem, 8vw, 4.5rem);
+        font-weight: 600;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .mobile-menu-tools {
+        display: grid;
+        gap: 22px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(17, 17, 17, .14);
+      }
+
+      .mobile-menu-search {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+
+      .mobile-menu-search input {
+        min-width: 0;
+        min-height: 46px;
+        border: 1px solid rgba(17, 17, 17, .2);
+        background: #fff;
+        padding: 0 14px;
+        color: #111;
+        font-size: .82rem;
+        font-weight: 700;
+      }
+
+      .mobile-language-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .mobile-language-row .language-option {
+        width: auto;
+        min-height: 38px;
+        padding: 0 14px;
+        border: 1px solid rgba(17, 17, 17, .18);
+      }
+
+      body.is-menu-open {
+        overflow: hidden;
+      }
+
       .hero {
         grid-template-columns: 1fr;
       }
@@ -939,16 +1107,23 @@
   <header class="site-header" aria-label="Vogue navigation">
     <a class="brand" href="#top">VOGUE</a>
     <nav class="nav" aria-label="Primary">
-      <a href="#stories">Fashion</a>
-      <a href="#featured">Beauty</a>
-      <a href="#stories">Living</a>
-      <a href="#runway">Culture</a>
-      <a href="#subscribe">Video</a>
+      <a href="fashion.html">Fashion</a>
+      <a href="beauty.html">Beauty</a>
+      <a href="living.html">Living</a>
+      <a href="culture.html">Culture</a>
+      <a href="video.html">Video</a>
     </nav>
     <div class="header-actions">
-      <button class="header-action" type="button" data-panel-target="search-panel" aria-expanded="false" aria-controls="search-panel">Search</button>
-      <button class="header-action" type="button" data-panel-target="language-panel" aria-expanded="false" aria-controls="language-panel">EN</button>
-      <button class="header-action" type="button" data-panel-target="menu-panel" aria-expanded="false" aria-controls="menu-panel">Menu</button>
+      <button class="header-action utility-action" type="button" data-panel-target="search-panel" aria-expanded="false" aria-controls="search-panel">Search</button>
+      <button class="header-action utility-action language-toggle" type="button" data-panel-target="language-panel" aria-expanded="false" aria-controls="language-panel">EN</button>
+      <button class="header-action menu-toggle" type="button" data-panel-target="menu-panel" aria-expanded="false" aria-controls="menu-panel" aria-label="Open menu">
+        <span class="menu-label">Menu</span>
+        <span class="hamburger-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
     </div>
   </header>
 
@@ -964,11 +1139,22 @@
   </div>
 
   <div class="header-panel menu-panel" id="menu-panel" hidden>
-    <button class="menu-option" type="button">Fashion</button>
-    <button class="menu-option" type="button">Beauty</button>
-    <button class="menu-option" type="button">Culture</button>
-    <button class="menu-option" type="button">Runway</button>
-    <button class="menu-option" type="button">Subscribe</button>
+    <a class="menu-option" href="fashion.html">Fashion</a>
+    <a class="menu-option" href="beauty.html">Beauty</a>
+    <a class="menu-option" href="living.html">Living</a>
+    <a class="menu-option" href="culture.html">Culture</a>
+    <a class="menu-option" href="video.html">Video</a>
+    <div class="mobile-menu-tools">
+      <div class="mobile-menu-search">
+        <input type="search" placeholder="Search Vogue" aria-label="Search Vogue mobile">
+        <button class="panel-button" type="button">Search</button>
+      </div>
+      <div class="mobile-language-row" aria-label="Language">
+        <button class="language-option is-selected" type="button" data-language="EN">EN</button>
+        <button class="language-option" type="button" data-language="KO">KO</button>
+        <button class="language-option" type="button" data-language="JP">JP</button>
+      </div>
+    </div>
   </div>
 
   <main id="top">
@@ -1321,7 +1507,7 @@
         ease: "power3.out"
       });
 
-      gsap.set(heroTiles, { flexGrow: 1, flexBasis: 0 });
+      gsap.set(heroTiles, { flexGrow: 1 });
       gsap.set(heroImages, { scale: 1, transformOrigin: "center center" });
       syncHeroTitleInk();
 
@@ -1332,24 +1518,21 @@
         }
 
         activeHeroIndex = activeHeroIndex === index ? -1 : index;
+        heroGrid.classList.toggle("has-active", activeHeroIndex !== -1);
         heroTiles.forEach((tile, tileIndex) => tile.classList.toggle("is-active", tileIndex === activeHeroIndex));
         gsap.killTweensOf(heroTiles);
         gsap.killTweensOf(heroImages);
 
         heroTiles.forEach((tile, tileIndex) => {
-          gsap.to(tile, {
-            flexGrow: activeHeroIndex === -1 ? 1 : tileIndex === activeHeroIndex ? 1.75 : .75,
-            yPercent: 0,
-            opacity: 1,
-            duration: .48,
-            ease: "power2.out",
-            onUpdate: syncHeroTitleInk,
-            onComplete: syncHeroTitleInk,
-            overwrite: "auto"
-          });
+          const tileSize = activeHeroIndex === -1 ? "25%" : tileIndex === activeHeroIndex ? "40%" : "20%";
+          tile.style.flex = `0 0 ${tileSize}`;
+          tile.style.setProperty("--tile-size", tileSize);
+          tile.style.width = tileSize;
         });
+        window.setTimeout(syncHeroTitleInk, 500);
 
         heroImages.forEach((image, tileIndex) => {
+          image.style.transform = tileIndex === activeHeroIndex ? "scale(1.14)" : "scale(1)";
           gsap.to(image, {
             scale: tileIndex === activeHeroIndex ? 1.14 : 1,
             duration: .44,
@@ -1363,7 +1546,7 @@
         tile.addEventListener("click", () => setHeroColumns(index));
         tile.addEventListener("mouseenter", () => {
           if (activeHeroIndex === -1) {
-            gsap.to(tile.querySelector("img"), { scale: 1.07, duration: .28, ease: "power2.out", overwrite: "auto" });
+            gsap.to(tile.querySelector("img"), { scale: 1.04, duration: .28, ease: "power2.out", overwrite: "auto" });
           }
         });
         tile.addEventListener("mouseleave", () => {
@@ -1488,6 +1671,7 @@
 
     document.querySelectorAll(".nav a").forEach((link) => {
       link.addEventListener("click", (event) => {
+        if (!link.getAttribute("href").startsWith("#")) return;
         event.preventDefault();
       });
     });
@@ -1750,14 +1934,67 @@
 
     const headerActions = document.querySelectorAll(".header-action");
     const headerPanels = document.querySelectorAll(".header-panel");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const hamburgerLines = gsap.utils.toArray(".hamburger-icon span");
+    const menuPanel = document.querySelector("#menu-panel");
+    const menuPanelItems = gsap.utils.toArray("#menu-panel .menu-option, #menu-panel .mobile-menu-tools");
+
+    gsap.set(menuPanel, { autoAlpha: 0, y: -18, scale: .98, transformOrigin: "top right" });
+    gsap.set(menuPanelItems, { autoAlpha: 0, y: 22 });
+
+    const animateMenuIcon = (open) => {
+      if (!hamburgerLines.length) return;
+
+      gsap.to(hamburgerLines[0], {
+        top: open ? 7 : 0,
+        rotate: open ? 45 : 0,
+        duration: .32,
+        ease: "power3.out"
+      });
+      gsap.to(hamburgerLines[1], {
+        autoAlpha: open ? 0 : 1,
+        x: open ? 8 : 0,
+        duration: .22,
+        ease: "power2.out"
+      });
+      gsap.to(hamburgerLines[2], {
+        top: open ? 7 : 14,
+        rotate: open ? -45 : 0,
+        duration: .32,
+        ease: "power3.out"
+      });
+    };
 
     const closeHeaderPanels = () => {
       headerPanels.forEach((panel) => {
-        panel.hidden = true;
+        if (panel.id === "menu-panel" && !panel.hidden) {
+          gsap.to(menuPanelItems, {
+            autoAlpha: 0,
+            y: 14,
+            duration: reduceMotion ? 0 : .16,
+            stagger: .015,
+            ease: "power2.in"
+          });
+          gsap.to(panel, {
+            autoAlpha: 0,
+            y: -16,
+            scale: .985,
+            duration: reduceMotion ? 0 : .26,
+            ease: "power2.inOut",
+            onComplete: () => {
+              panel.hidden = true;
+            }
+          });
+        } else {
+          panel.hidden = true;
+        }
       });
       headerActions.forEach((button) => {
         button.setAttribute("aria-expanded", "false");
       });
+      document.body.classList.remove("is-menu-open");
+      menuToggle?.setAttribute("aria-label", "Open menu");
+      animateMenuIcon(false);
     };
 
     headerActions.forEach((button) => {
@@ -1770,6 +2007,24 @@
         if (willOpen) {
           panel.hidden = false;
           button.setAttribute("aria-expanded", "true");
+          if (panel.id === "menu-panel") {
+            document.body.classList.add("is-menu-open");
+            button.setAttribute("aria-label", "Close menu");
+            animateMenuIcon(true);
+            gsap.fromTo(panel,
+              { autoAlpha: 0, y: -22, scale: .965 },
+              { autoAlpha: 1, y: 0, scale: 1, duration: reduceMotion ? 0 : .42, ease: "power3.out" }
+            );
+            gsap.fromTo(menuPanelItems,
+              { autoAlpha: 0, y: 26 },
+              { autoAlpha: 1, y: 0, duration: reduceMotion ? 0 : .5, stagger: .055, delay: reduceMotion ? 0 : .08, ease: "power3.out" }
+            );
+          } else {
+            gsap.fromTo(panel,
+              { autoAlpha: 0, y: -8 },
+              { autoAlpha: 1, y: 0, duration: reduceMotion ? 0 : .22, ease: "power2.out" }
+            );
+          }
           panel.querySelector("input, button")?.focus();
         }
       });
@@ -1785,13 +2040,15 @@
       option.addEventListener("click", () => {
         document.querySelectorAll(".language-option").forEach((item) => item.classList.remove("is-selected"));
         option.classList.add("is-selected");
-        document.querySelector('[data-panel-target="language-panel"]').textContent = option.dataset.language;
+        document.querySelector(".language-toggle").textContent = option.dataset.language;
         closeHeaderPanels();
       });
     });
 
-    document.querySelector(".search-panel .panel-button").addEventListener("click", () => {
-      document.querySelector(".search-panel input").focus();
+    document.querySelectorAll(".search-panel .panel-button, .mobile-menu-search .panel-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        button.closest(".search-panel, .mobile-menu-search")?.querySelector("input")?.focus();
+      });
     });
 
     document.querySelectorAll(".menu-option").forEach((option) => {
