@@ -414,8 +414,8 @@
 
     .magazine-tile {
       position: relative;
-      flex: 1 1 0;
-      width: auto;
+      flex: 0 0 25%;
+      width: 25%;
       min-width: 0;
       overflow: hidden;
       border-left: 1px solid rgba(255, 255, 255, .16);
@@ -425,12 +425,14 @@
     }
 
     .hero-grid.has-active .magazine-tile {
-      flex-grow: .75;
+      flex-basis: 20%;
+      width: 20%;
     }
 
     .magazine-tile.is-active {
       z-index: 4;
-      flex-grow: 1.75;
+      flex-basis: 40%;
+      width: 40%;
     }
 
     .magazine-tile.is-active img {
@@ -1039,8 +1041,23 @@
         scroll-snap-align: start;
       }
 
+      .featured {
+        height: auto;
+        min-height: 100svh;
+        padding-bottom: 72px;
+        background: #f7f5f0;
+      }
+
       .featured-panel {
         padding: 42px 24px 56px;
+      }
+
+      .featured-panel .btn {
+        margin-bottom: 34px;
+      }
+
+      .featured .section-scroll-cue {
+        bottom: 34px;
       }
 
       .featured,
@@ -1188,49 +1205,49 @@
     <section class="stories" id="stories" aria-labelledby="stories-title">
       <div class="section-head">
         <p class="section-label" id="stories-title">Vogue Sections</p>
-        <a class="text-link" href="#subscribe">View All Stories</a>
+        <a class="text-link" href="fashion.html">View All Stories</a>
       </div>
       <div class="story-grid">
-        <article class="story-card">
+        <a class="story-card" href="fashion.html" aria-label="Open Fashion page">
           <img src="imges/hero_img1.png" alt="Fashion editorial cover">
           <div class="story-meta">
             <h3>Fashion</h3>
             <p>New silhouettes, styling, and editorial direction.</p>
             <span>Read More</span>
           </div>
-        </article>
-        <article class="story-card">
+        </a>
+        <a class="story-card" href="beauty.html" aria-label="Open Beauty page">
           <img src="imges/sec3_img2.png" alt="Beauty editorial cover">
           <div class="story-meta">
             <h3>Beauty</h3>
             <p>The looks, artists, and rituals defining now.</p>
             <span>Read More</span>
           </div>
-        </article>
-        <article class="story-card">
+        </a>
+        <a class="story-card" href="living.html" aria-label="Open Living page">
           <img src="imges/sec3_img3.jpg" alt="Living editorial cover">
           <div class="story-meta">
             <h3>Living</h3>
             <p>Design, interiors, travel, and modern taste.</p>
             <span>Read More</span>
           </div>
-        </article>
-        <article class="story-card">
+        </a>
+        <a class="story-card" href="culture.html" aria-label="Open Culture page">
           <img src="imges/sec_img4.jpg" alt="Culture editorial cover">
           <div class="story-meta">
             <h3>Culture</h3>
             <p>People, scenes, and ideas shaping the moment.</p>
             <span>Read More</span>
           </div>
-        </article>
-        <article class="story-card">
+        </a>
+        <a class="story-card" href="video.html" aria-label="Open Video page">
           <img src="imges/sec3_img5.jpg" alt="Video editorial cover">
           <div class="story-meta">
             <h3>Video</h3>
             <p>Fashion films, interviews, and visual stories.</p>
             <span>Read More</span>
           </div>
-        </article>
+        </a>
       </div>
     </section>
 
@@ -1437,7 +1454,7 @@
             y: yRatio * depth,
             duration: .7,
             ease: "power3.out",
-            overwrite: "auto"
+            overwrite: false
           });
         });
       });
@@ -1462,16 +1479,15 @@
       gsap.killTweensOf(heroImages);
 
       if (instant || reduceMotion) {
-        gsap.set(heroTiles, { flexGrow: 1, flexBasis: 0, width: "auto", yPercent: 0, opacity: 1 });
+        gsap.set(heroTiles, { flexBasis: "25%", width: "25%", yPercent: 0, opacity: 1 });
         gsap.set(heroImages, { scale: 1 });
         syncHeroTitleInk();
         return;
       }
 
       gsap.to(heroTiles, {
-        flexGrow: 1,
-        flexBasis: 0,
-        width: "auto",
+        flexBasis: "25%",
+        width: "25%",
         yPercent: 0,
         opacity: 1,
         duration: .46,
@@ -1505,7 +1521,7 @@
         ease: "power3.out"
       });
 
-      gsap.set(heroTiles, { flexGrow: 1, flexBasis: 0 });
+      gsap.set(heroTiles, { flexBasis: "25%", width: "25%" });
       gsap.set(heroImages, { scale: 1, transformOrigin: "center center" });
       syncHeroTitleInk();
 
@@ -1522,10 +1538,10 @@
         gsap.killTweensOf(heroImages);
 
         heroTiles.forEach((tile, tileIndex) => {
+          const tileSize = activeHeroIndex === -1 ? "25%" : tileIndex === activeHeroIndex ? "40%" : "20%";
           gsap.to(tile, {
-            flexGrow: activeHeroIndex === -1 ? 1 : tileIndex === activeHeroIndex ? 1.75 : .75,
-            flexBasis: 0,
-            width: "auto",
+            flexBasis: tileSize,
+            width: tileSize,
             yPercent: 0,
             opacity: 1,
             duration: .48,
