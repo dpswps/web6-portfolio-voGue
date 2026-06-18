@@ -414,8 +414,8 @@
 
     .magazine-tile {
       position: relative;
-      flex: 0 0 var(--tile-size, 25%);
-      width: var(--tile-size, 25%);
+      flex: 1 1 0;
+      width: auto;
       min-width: 0;
       overflow: hidden;
       border-left: 1px solid rgba(255, 255, 255, .16);
@@ -425,19 +425,16 @@
     }
 
     .hero-grid.has-active .magazine-tile {
-      flex-grow: 0 !important;
-      width: var(--tile-size, 20%) !important;
+      flex-grow: .75;
     }
 
     .magazine-tile.is-active {
       z-index: 4;
-      flex-grow: 0 !important;
-      width: var(--tile-size, 40%) !important;
+      flex-grow: 1.75;
     }
 
     .magazine-tile.is-active img {
       filter: contrast(1.08);
-      transform: scale(1.14) !important;
     }
 
     .magazine-tile:focus {
@@ -1021,10 +1018,10 @@
       .hero-grid {
         display: flex;
         min-height: 62svh;
-        gap: 14px;
+        gap: 0;
         overflow-x: auto;
         overflow-y: hidden;
-        padding: 0 16px 34px;
+        padding: 0 0 34px;
         scroll-snap-type: x mandatory;
         contain: layout paint;
         scrollbar-width: none;
@@ -1035,8 +1032,8 @@
       }
 
       .magazine-tile {
-        flex: 0 0 calc(100vw - 32px);
-        width: calc(100vw - 32px);
+        flex: 0 0 100vw !important;
+        width: 100vw !important;
         min-height: 58svh;
         border-left: 0;
         scroll-snap-align: start;
@@ -1465,7 +1462,7 @@
       gsap.killTweensOf(heroImages);
 
       if (instant || reduceMotion) {
-        gsap.set(heroTiles, { flexGrow: 1, flexBasis: 0, yPercent: 0, opacity: 1 });
+        gsap.set(heroTiles, { flexGrow: 1, flexBasis: 0, width: "auto", yPercent: 0, opacity: 1 });
         gsap.set(heroImages, { scale: 1 });
         syncHeroTitleInk();
         return;
@@ -1474,6 +1471,7 @@
       gsap.to(heroTiles, {
         flexGrow: 1,
         flexBasis: 0,
+        width: "auto",
         yPercent: 0,
         opacity: 1,
         duration: .46,
@@ -1507,7 +1505,7 @@
         ease: "power3.out"
       });
 
-      gsap.set(heroTiles, { flexGrow: 1 });
+      gsap.set(heroTiles, { flexGrow: 1, flexBasis: 0 });
       gsap.set(heroImages, { scale: 1, transformOrigin: "center center" });
       syncHeroTitleInk();
 
@@ -1524,15 +1522,21 @@
         gsap.killTweensOf(heroImages);
 
         heroTiles.forEach((tile, tileIndex) => {
-          const tileSize = activeHeroIndex === -1 ? "25%" : tileIndex === activeHeroIndex ? "40%" : "20%";
-          tile.style.flex = `0 0 ${tileSize}`;
-          tile.style.setProperty("--tile-size", tileSize);
-          tile.style.width = tileSize;
+          gsap.to(tile, {
+            flexGrow: activeHeroIndex === -1 ? 1 : tileIndex === activeHeroIndex ? 1.75 : .75,
+            flexBasis: 0,
+            width: "auto",
+            yPercent: 0,
+            opacity: 1,
+            duration: .48,
+            ease: "power2.out",
+            onUpdate: syncHeroTitleInk,
+            onComplete: syncHeroTitleInk,
+            overwrite: "auto"
+          });
         });
-        window.setTimeout(syncHeroTitleInk, 500);
 
         heroImages.forEach((image, tileIndex) => {
-          image.style.transform = tileIndex === activeHeroIndex ? "scale(1.14)" : "scale(1)";
           gsap.to(image, {
             scale: tileIndex === activeHeroIndex ? 1.14 : 1,
             duration: .44,
