@@ -311,20 +311,7 @@
     }
 
     .hero-kicker {
-      width: 10px;
-      display: grid;
-      gap: 20px;
-    }
-
-    .hero-kicker span {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .55);
-    }
-
-    .hero-kicker span:nth-child(3) {
-      background: #fff;
+      display: none;
     }
 
     .hero-title {
@@ -1023,7 +1010,8 @@
 
       .hero-copy {
         gap: 30px;
-        padding: 112px 24px 30px;
+        min-height: 34svh;
+        padding: 112px 24px 22px;
       }
 
       .hero-title {
@@ -1031,15 +1019,27 @@
       }
 
       .hero-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 74vw);
+        display: flex;
+        min-height: 62svh;
+        gap: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0 16px 34px;
         scroll-snap-type: x mandatory;
         contain: layout paint;
+        scrollbar-width: none;
+      }
+
+      .hero-grid::-webkit-scrollbar {
+        display: none;
       }
 
       .magazine-tile {
-        min-height: 62svh;
-        scroll-snap-align: center;
+        flex: 0 0 calc(100vw - 32px);
+        width: calc(100vw - 32px);
+        min-height: 58svh;
+        border-left: 0;
+        scroll-snap-align: start;
       }
 
       .featured-panel {
